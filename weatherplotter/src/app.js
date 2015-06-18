@@ -1,57 +1,91 @@
-var HelloWorldLayer = cc.Layer.extend({
+var smhiData;
+var width = 246;
+var height = 268;
+var pointArray = new Array(width);
+  for(var i = 0; i < width; i++) 
+  {
+    pointArray[i] = new Array(height);
+  }
+
+var MenuLayer = cc.Layer.extend({
     sprite:null,
     rect:null,
     node:null,
     ctor:function () {
-        //////////////////////////////
-        // 1. super init first
-        this._super();
 
-        /////////////////////////////
-        // 2. add a menu item with "X" image, which is clicked to quit the program
-        //    you may modify it.
-        // ask the window size
+        this._super();
+    },
+    init:function(){
+
         var size = cc.winSize;
 
-        // add a "close" icon to exit the progress. it's an autorelease object
-       // var closeItem = new cc.MenuItemImage(
-       //     res.CloseNormal_png,
-       //     res.CloseSelected_png,
-       //     function () {
-       //         cc.log("Menu is clicked!");
-       //     }, this);
-       // closeItem.attr({
-       //     x: size.width - 20,
-       //     y: 20,
-       //     anchorX: 0.5,
-       //     anchorY: 0.5
-       // });
+        var loadingText = new cc.LabelTTF("Loading Points", "Helvetica", 20);
+        loadingText.setPosition(cc.p(size.width/2, size.height/2));
+        this.addChild(loadingText);
 
-       // var menu = new cc.Menu(closeItem);
-       // menu.x = 0;
-       // menu.y = 0;
-       // this.addChild(menu, 1);
+        var circle1 = cc.DrawNode.create();
+        circle1.drawDot(size.width/1.7, size.height/1.9, 5, cc.color(255,0,0,255));
+        this.addChild(circle1);
+        var circle2 = cc.DrawNode.create();
+        circle2.drawDot(size.width/1.7, size.height/2, 3, cc.color(0,255,0,255));
+        this.addChild(circle2);
+        var circle3 = cc.DrawNode.create();
+        circle3.drawDot(size.width/1.7, size.height/2.1, 2, cc.color(0,0,255,255));
+        this.addChild(circle3);
 
-        // Manually written code:
-
-        this.sprite = cc.Sprite.create(res.HelloWorld_png);
-        this.sprite.attr({
-            x: size.width / 2,
-            y: size.height / 2,
-            scale: 0.5,
-            rotation: 180
+        cc.loader.loadJson("res/smhi_data_every5.json", function(error, data){
+          smhiData = data;
+          getPoint();
+          cc.director.runScene(new PlayScene(pointArray));
+          //drawPointSprite();
         });
-        this.addChild(this.sprite, 0);
-        graySprite(this.sprite);
-
-        this.node = cc.DrawNode.create();
-        this.addChild(this.node, 0);
-        this.node.drawRect(cc.p(100,100), cc.p(200, 200), cc.color(100, 100, 200, 255), 3, cc.color(0,255,0,255));
-        graySprite(this.node);
+        
 
         return true;
     }
+
 });
+
+var MenuScene = cc.Scene.extend({
+    onEnter:function () {
+        this._super();
+        var layer = new MenuLayer();
+        layer.init();
+        this.addChild(layer);
+    }
+});
+
+
+function getPoint(){
+
+        var xStart = 30;
+        var xEnd = 230;
+        var yStart = 5;
+        var yEnd = 255;
+        var arrCount = 0;
+        var count = 0;
+
+        for(var x = 0; x < width; x++) 
+        {
+          for(var y = 0; y < height; y++) 
+          {
+              pointArray[x][y] = 0;
+          }
+        }
+
+        for(var x = xStart; x < xEnd; x += 5) {
+          for(var y = yEnd-5; y >= yStart; y -= 5) {
+            //console.log('x: ' + x + ' y: ' + y)
+                pointArray[x][y] = smhiData.SMHIPoints[arrCount];
+                //console.log(pointArray[x][y]);
+                arrCount++;
+                count++;
+            }
+        }
+        
+        cc.log(count + ' points loaded!');
+}
+
 
 function graySprite(sprite)
 {
@@ -67,11 +101,5 @@ function graySprite(sprite)
     sprite.setShaderProgram(shader);
 }
 
-var HelloWorldScene = cc.Scene.extend({
-    onEnter:function () {
-        this._super();
-        var layer = new HelloWorldLayer();
-        this.addChild(layer);
-    }
-});
+
 

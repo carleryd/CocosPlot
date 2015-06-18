@@ -2,6 +2,7 @@ var res = {
     HelloWorld_png : "res/HelloWorld.png",
     CloseNormal_png : "res/CloseNormal.png",
     CloseSelected_png : "res/CloseSelected.png",
+    map_jpg : "res/map.jpg",
     vert_shader: "res/shaders/gray.vsh",
     frag_shader: "res/shaders/gray.fsh"
 };
