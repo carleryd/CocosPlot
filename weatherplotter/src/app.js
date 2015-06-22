@@ -26,10 +26,10 @@ var MenuLayer = cc.Layer.extend({
         test.setPosition(cc.p(size.width/2, size.height/2));
         this.addChild(test);
 
-        /*var loadingText = new cc.LabelTTF("Loading Points", "Helvetica", 20);
+        var loadingText = new cc.LabelTTF("Loading Points", "Helvetica", 20);
         loadingText.setPosition(cc.p(size.width/2, size.height/2));
         this.addChild(loadingText);
-*/
+
         var circle1 = cc.DrawNode.create();
         circle1.drawDot(cc.p(size.width/1.7, size.height/1.9), 5, cc.color(255,0,0,255));
         this.addChild(circle1);
