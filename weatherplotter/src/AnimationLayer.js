@@ -49,25 +49,125 @@ var AnimationLayer = cc.Layer.extend({
             }, this);
         }
 
-        if(cc.sys.capabilities.hasOwnProperty('touches'))
-        {
-            cc.eventManager.addListener(
-            {
-                event: cc.EventListener.TOUCH_ONE_BY_ONE,
-                onTouchBegan:function(touch, event)
-                {
-                    //cc.log(touch.getLocationX());
-                    time ++;
-                    drawPointSprite(time, smhiData);
+        if( true || 'touches' in cc.sys.capabilities ) { // touches work on mac but return false
+        cc.eventManager.addListener(cc.EventListener.create({
+            event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+            onTouchesBegan: function(touches, event) {
+                console.log("onTouchesBegan!");
 
-                    return true;
+                var touch = touches[0];
+                var loc = touch.getLocation();
+
+                self.touchStartPoint = {
+                    x: loc.x,
+                    y: loc.y
+                };
+
+                self.touchLastPoint = {
+                        x: loc.x,
+                        y: loc.y
+                };
+
+                self.touchThreshold = 10;
+            },
+
+            onTouchesMoved: function(touches, event) {
+                var touch = touches[0];
+                var loc = touch.getLocation(),
+                    start = self.touchStartPoint;
+
+                // check for left
+                if( loc.x < start.x - self.touchThreshold ) {
+                    // if direction changed while swiping left, set new base point
+                    if( loc.x > self.touchLastPoint.x ) {
+                        start = self.touchStartPoint = {
+                                x: loc.x,
+                                y: loc.y
+                        };
+                        self.isSwipeLeft = false;
+                    } else {
+                        self.isSwipeLeft = true;                        
+                    }
                 }
-                onTochMoved:function(touch event)
-                {
-                    cc.log(touch.getLocationX());
+
+                // check for right
+                if( loc.x > start.x + self.touchThreshold ) {
+                    // if direction changed while swiping right, set new base point
+                    if( loc.x < self.touchLastPoint.x ) {
+                        self.touchStartPoint = {
+                                x: loc.x,
+                                y: loc.y
+                        };
+                        self.isSwipeRight = false;
+                    } else {
+                        self.isSwipeRight = true;                       
+                    }
                 }
-            }, this);
-        }
+
+                // check for down
+                if( loc.y < start.y - self.touchThreshold ) {
+                    // if direction changed while swiping down, set new base point
+                    if( loc.y > self.touchLastPoint.y ) {
+                        self.touchStartPoint = {
+                                x: loc.x,
+                                y: loc.y
+                        };
+                        self.isSwipeDown = false;
+                    } else {
+                        self.isSwipeDown = true;                        
+                    }
+                }
+
+                // check for up
+                if( loc.y > start.y + self.touchThreshold ) {
+                    // if direction changed while swiping right, set new base point
+                    if( loc.y < self.touchLastPoint.y ) {
+                        self.touchStartPoint = {
+                                x: loc.x,
+                                y: loc.y
+                        };
+                        self.isSwipeUp = false;
+                    } else {
+                        self.isSwipeUp = true;                      
+                    }
+                }
+
+                self.touchLastPoint = {
+                        x: loc.x,
+                        y: loc.y
+                };
+            },
+
+            onTouchesEnded: function(touches, event){
+                console.log("onTouchesEnded!");
+
+                var touch = touches[0],
+                    loc = touch.getLocation()
+                    size = self.size;
+
+                self.touchStartPoint = null;
+
+                if( !self.isSwipeUp && !self.isSwipeLeft && !self.isSwipeRight && !self.isSwipeDown ) {
+                    if( loc.y > size.height*0.25 && loc.y < size.height*0.75 ) {
+                        (loc.x < size.width*0.50)? self.isTouchLeft = true : self.isTouchRight = true;
+                    } else if( loc.y > size.height*0.75 ) {
+                        self.isTouchUp = true;
+                    } else {
+                        self.isTouchDown = true;
+                    }
+                }
+
+                self.isSwipeUp = self.isSwipeLeft = self.isSwipeRight = self.isSwipeDown = false;
+
+                //location.y = self.size.height;
+                //event.getCurrentTarget().addNewTileWithCoords(location);
+            }
+        }), this);
+    } else {
+        cc.log("TOUCH_ALL_AT_ONCE is not supported");
+    }
+
+
     },
     createNodes:function(smhiData)
     {
