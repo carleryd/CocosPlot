@@ -6,7 +6,9 @@ var res = {
     vert_shader: "res/shaders/gray.vsh",
     frag_shader: "res/shaders/gray.fsh",
     interpolate_vert_shader: "res/shaders/interpolate.vsh",
-    interpolate_frag_shader: "res/shaders/interpolate.fsh"
+    interpolate_frag_shader: "res/shaders/interpolate.fsh",
+    test_png: "res/test.png",
+    test_plist: "res/test.plist"
 };
 
 var g_resources = [];

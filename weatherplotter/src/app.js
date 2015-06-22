@@ -8,6 +8,7 @@ var pointArray = new Array(width);
   }
 
 var MenuLayer = cc.Layer.extend({
+    spriteSheet:null,
     sprite:null,
     rect:null,
     node:null,
@@ -18,6 +19,12 @@ var MenuLayer = cc.Layer.extend({
     init:function(){
 
         var size = cc.winSize;
+                                
+        cache = cc.spriteFrameCache;
+        cache.addSpriteFrames(res.test_plist, res.test_png);
+        var test = cc.Sprite.create(cache.getSpriteFrame("CloseNormal.png"));
+        test.setPosition(cc.p(size.width/2, size.height/2));
+        this.addChild(test);
 
         /*var loadingText = new cc.LabelTTF("Loading Points", "Helvetica", 20);
         loadingText.setPosition(cc.p(size.width/2, size.height/2));
@@ -40,8 +47,6 @@ var MenuLayer = cc.Layer.extend({
           cc.director.runScene(new PlayScene(pointArray));
           //drawPointSprite();
         });
-
-
         return true;
     }
 
