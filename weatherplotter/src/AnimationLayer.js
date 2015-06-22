@@ -9,6 +9,7 @@ for(var i = 0; i < 246; i++) {
     smhi[i] = new Array(268);
 }
 
+var loadingText;
 var startTouch;
 var endTouch;
 var swipeTolerance = 10;
@@ -77,6 +78,9 @@ var AnimationLayer = cc.Layer.extend({
                 }
             }
         }
+
+        loadingText = new cc.LabelTTF("test", "Helvetica", 20);
+        this.addChild(loadingText);
 
         drawPointSprite(0, smhiData);
     }
@@ -168,6 +172,13 @@ var color;
                 // if(parameter == "t")
                 // {  
                     var temp = smhiData[x][y].timeseries[time].t * 100 / 100;
+                    var timeStamp = smhiData[x][y].timeseries[time].validTime;
+                    cc.log(timeStamp);
+
+                    
+                    loadingText.setPosition(cc.p(500, 600));
+                    loadingText.setString(timeStamp);
+
 
                     //console.log(temp);
                     if(temp <= 0)
