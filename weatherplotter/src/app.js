@@ -41,7 +41,7 @@ var MenuLayer = cc.Layer.extend({
         circle3.drawDot(cc.p(size.width/1.7, size.height/2.1), 2, cc.color(0,0,255,255));
         this.addChild(circle3);
 
-        cc.loader.loadJson("res/smhi_data_every5.json", function(error, data){
+        cc.loader.loadJson("res/smhi_data_every10.json", function(error, data){
           smhiData = data;
           getPoint();
           cc.director.runScene(new PlayScene(pointArray));
@@ -79,8 +79,8 @@ function getPoint(){
           }
         }
 
-        for(var x = xStart; x < xEnd; x += 5) {
-          for(var y = yEnd-5; y >= yStart; y -= 5) {
+        for(var x = xStart; x < xEnd; x += 10) {
+          for(var y = yEnd-10; y >= yStart; y -= 10) {
             //console.log('x: ' + x + ' y: ' + y)
                 pointArray[x][y] = smhiData.SMHIPoints[arrCount];
                 //console.log(pointArray[x][y]);
