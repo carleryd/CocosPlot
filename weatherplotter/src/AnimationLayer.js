@@ -77,11 +77,19 @@ var color;
 
             //var circle = drawCircle(xValue, yValue, 15, color);
 
-            var drawnode = cc.DrawNode.create();
-            drawnode.drawDot(cc.p(xValue,yValue),2,color);
+//            var drawnode = cc.DrawNode.create();
+//            drawnode.drawDot(cc.p(xValue,yValue),2,color);
+        
+            cache = cc.spriteFrameCache;
+            cache.addSpriteFrames(res.test_plist, res.test_png);
+            var test = cc.Sprite.create(cache.getSpriteFrame("CloseNormal.png"));
+            test.setPosition(cc.p(xValue, yValue));
+            test.setScale(0.5);
+        
+        
 
 
-            return drawnode;
+            return test;
         //}
     } 
     else return null;

@@ -8,6 +8,7 @@ var pointArray = new Array(width);
   }
 
 var MenuLayer = cc.Layer.extend({
+    spriteSheet:null,
     sprite:null,
     rect:null,
     node:null,
@@ -18,19 +19,25 @@ var MenuLayer = cc.Layer.extend({
     init:function(){
 
         var size = cc.winSize;
+                                
+        cache = cc.spriteFrameCache;
+        cache.addSpriteFrames(res.test_plist, res.test_png);
+        var test = cc.Sprite.create(cache.getSpriteFrame("CloseNormal.png"));
+        test.setPosition(cc.p(size.width/2, size.height/2));
+        this.addChild(test);
 
         var loadingText = new cc.LabelTTF("Loading Points", "Helvetica", 20);
         loadingText.setPosition(cc.p(size.width/2, size.height/2));
         this.addChild(loadingText);
 
         var circle1 = cc.DrawNode.create();
-        circle1.drawDot(size.width/1.7, size.height/1.9, 5, cc.color(255,0,0,255));
+        circle1.drawDot(cc.p(size.width/1.7, size.height/1.9), 5, cc.color(255,0,0,255));
         this.addChild(circle1);
         var circle2 = cc.DrawNode.create();
-        circle2.drawDot(size.width/1.7, size.height/2, 3, cc.color(0,255,0,255));
+        circle2.drawDot(cc.p(size.width/1.7, size.height/2), 3, cc.color(0,255,0,255));
         this.addChild(circle2);
         var circle3 = cc.DrawNode.create();
-        circle3.drawDot(size.width/1.7, size.height/2.1, 2, cc.color(0,0,255,255));
+        circle3.drawDot(cc.p(size.width/1.7, size.height/2.1), 2, cc.color(0,0,255,255));
         this.addChild(circle3);
 
         cc.loader.loadJson("res/smhi_data_every5.json", function(error, data){
@@ -39,6 +46,7 @@ var MenuLayer = cc.Layer.extend({
           cc.director.runScene(new PlayScene(pointArray));
           //drawPointSprite();
         });
+        
         
 
         return true;

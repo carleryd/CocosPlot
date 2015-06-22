@@ -4,7 +4,9 @@ var res = {
     CloseSelected_png : "res/CloseSelected.png",
     map_jpg : "res/map.jpg",
     vert_shader: "res/shaders/gray.vsh",
-    frag_shader: "res/shaders/gray.fsh"
+    frag_shader: "res/shaders/gray.fsh",
+    test_png: "res/test.png",
+    test_plist: "res/test.plist"
 };
 
 var g_resources = [];
