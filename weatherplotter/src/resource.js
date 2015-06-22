@@ -5,8 +5,11 @@ var res = {
     map_jpg : "res/map.jpg",
     vert_shader: "res/shaders/gray.vsh",
     frag_shader: "res/shaders/gray.fsh",
+    interpolate_vert_shader: "res/shaders/interpolate.vsh",
+    interpolate_frag_shader: "res/shaders/interpolate.fsh",
     test_png: "res/test.png",
-    test_plist: "res/test.plist"
+    test_plist: "res/test.plist",
+    smhi_data_every10_json: "res/smhi_data_every10.json"
 };
 
 var g_resources = [];

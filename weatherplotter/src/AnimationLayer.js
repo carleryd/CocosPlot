@@ -81,23 +81,26 @@ var color;
                 color = cc.color(135, 13, 165, 255);
             else if(temp > 15 && temp <= 20)
                 color = cc.color(229, 11, 98, 255);
-            else if(temp > 20) 
+            else if(temp > 20) {
                 color = cc.color(255, 0, 0, 255);
+            }
             else
-                color = cc.color(0, 0, 0, 255);
+                color = cc.color(0, 255, 0, 255);
 
             //cc.log(xValue + " " + yValue + " " + color);
 
             //var circle = drawCircle(xValue, yValue, 15, color);
 
-            var drawnode = cc.DrawNode.create();
-            drawnode.drawDot(cc.p(xValue,yValue),2,color);
+
+        var drawnode = cc.DrawNode.create();
+        drawnode.drawDot(cc.p(xValue,yValue),6,color);
         
-            // cache = cc.spriteFrameCache;
-            // cache.addSpriteFrames(res.test_plist, res.test_png);
-            // var test = cc.Sprite.create(cache.getSpriteFrame("CloseNormal.png"));
-            // test.setPosition(cc.p(xValue, yValue));
-            // test.setScale(0.5);
+//            cache = cc.spriteFrameCache;
+            //cache.addSpriteFrames(res.test_plist, res.test_png);
+            //var test = cc.Sprite.create(cache.getSpriteFrame("CloseNormal.png"));
+            //test.setPosition(cc.p(xValue, yValue));
+            //test.setScale(0.5);
+
         
         
 
