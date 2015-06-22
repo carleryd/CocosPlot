@@ -7,8 +7,21 @@ var AnimationLayer = cc.Layer.extend({
     {
         this._super();
 
-        //var circle = drawCircle(250, 100, 15, cc.color(255,0,0,255));
-        //this.addChild(circle,0);
+        var circle = drawCircle(250, 100, 15, cc.color(255,0,0,255));
+        this.addChild(circle);
+
+        if(cc.sys.capabilities.hasOwnProperty('touches'))
+        {
+            cc.eventManager.addListener(
+            {
+                event: cc.EventListener.TOUCH_ONE_BY_ONE,
+                onTouchBegan:function(touch, event)
+                {
+                    cc.log(touch.getLocationX());
+                    return true;
+                }
+            }, this);
+        }
 
 
     for(var x = 0; x < 246; x++)
@@ -77,19 +90,19 @@ var color;
 
             //var circle = drawCircle(xValue, yValue, 15, color);
 
-//            var drawnode = cc.DrawNode.create();
-//            drawnode.drawDot(cc.p(xValue,yValue),2,color);
+            var drawnode = cc.DrawNode.create();
+            drawnode.drawDot(cc.p(xValue,yValue),2,color);
         
-            cache = cc.spriteFrameCache;
-            cache.addSpriteFrames(res.test_plist, res.test_png);
-            var test = cc.Sprite.create(cache.getSpriteFrame("CloseNormal.png"));
-            test.setPosition(cc.p(xValue, yValue));
-            test.setScale(0.5);
+            // cache = cc.spriteFrameCache;
+            // cache.addSpriteFrames(res.test_plist, res.test_png);
+            // var test = cc.Sprite.create(cache.getSpriteFrame("CloseNormal.png"));
+            // test.setPosition(cc.p(xValue, yValue));
+            // test.setScale(0.5);
         
         
 
 
-            return test;
+            return drawnode;
         //}
     } 
     else return null;
@@ -98,7 +111,8 @@ var color;
 var eventHandler = cc.EventListener.create({
     event: cc.EventListener.MOUSE,
     onMouseDown: function (event) 
-    {
+    {      
+        cc.log("hej");
 
         var target = event.getCurrentTarget();
         var locationInNode = target.convertToNodeSpace(event.getLocation());
