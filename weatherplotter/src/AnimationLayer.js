@@ -29,8 +29,9 @@ var AnimationLayer = cc.Layer.extend({
 
         //var time = 0;
 
-        //var circle = drawCircle(250, 100, 15, cc.color(255,0,0,255));
-        //this.addChild(circle);
+        var circle = drawCircle(250, 100, 15, cc.color(255,0,0,255));
+        circle.setColor = cc.color(0,255,0,255);
+        this.addChild(circle);
 
 
         if(cc.sys.capabilities.hasOwnProperty('keyboard'))
@@ -132,13 +133,14 @@ function swipeDirection()
 }
 
 
-function drawCircle(node, x, y, radius, color)
+function drawCircle(x, y, radius, color)
 {
 
-    //var drawnode = cc.DrawNode.create();
-    node.drawDot(cc.p(x,y),radius,color);
+    var drawnode = cc.DrawNode.create();
+    drawnode.drawDot(cc.p(x,y),radius,color);
+    drawnode.setColor(cc.color(0,255,0));
 
-    //return drawnode;
+    return drawnode;
 }
 
 
@@ -185,7 +187,7 @@ var color;
                         color = cc.color(0, 255, 0, 255);
 
                     //cc.log(xValue + " " + yValue + " " + color);
-
+                    nodes[x][y].clear();
                     nodes[x][y].drawDot(cc.p(xValue,yValue),6,color);
 
                     //cache = cc.spriteFrameCache;
