@@ -7,6 +7,8 @@ var AnimationLayer = cc.Layer.extend({
     {
         this._super();
 
+        var time = 0;
+
         var circle = drawCircle(250, 100, 15, cc.color(255,0,0,255));
         this.addChild(circle);
 
@@ -18,6 +20,19 @@ var AnimationLayer = cc.Layer.extend({
                 onTouchBegan:function(touch, event)
                 {
                     cc.log(touch.getLocationX());
+                    time ++;
+
+                        for(var x = 0; x < 246; x++)
+                        {
+                            for(var y = 0; y < 268; y++)
+                            {
+                                    var point = drawPointSprite(x, y, time, smhiData);
+                                    if(point != null)
+                                    {
+                                        this.addChild(point);
+                                    }
+                            }
+                        }
                     return true;
                 }
             }, this);
@@ -28,7 +43,7 @@ var AnimationLayer = cc.Layer.extend({
     {
         for(var y = 0; y < 268; y++)
         {
-                var point = drawPointSprite(x, y, smhiData);
+                var point = drawPointSprite(x, y, time, smhiData);
                 if(point != null)
                 {
                     this.addChild(point);
@@ -51,7 +66,7 @@ function drawCircle(x, y, radius, color)
 
 
 
-function drawPointSprite(x, y, smhiData){
+function drawPointSprite(x, y, time, smhiData){
 var offsetX = 480;
 var offsetY = 130;
 var scaleX = 2.0/3;
@@ -68,7 +83,7 @@ var color;
 
         // if(parameter == "t")
         // {  
-            var temp = smhiData[x][y].timeseries[0].t * 100 / 100;
+            var temp = smhiData[x][y].timeseries[time].t * 100 / 100;
 
             //console.log(temp);
             if(temp <= 0)
