@@ -62,6 +62,10 @@ var AnimationLayer = cc.Layer.extend({
 
                     return true;
                 }
+                onTochMoved:function(touch event)
+                {
+                    cc.log(touch.getLocationX());
+                }
             }, this);
         }
     },
