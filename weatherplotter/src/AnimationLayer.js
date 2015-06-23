@@ -1,12 +1,12 @@
 
-var nodes = new Array(246);
-for(var i = 0; i < 246; i++) {
-    nodes[i] = new Array(268);
+var nodes = new Array(20);
+for(var i = 0; i < 20; i++) {
+    nodes[i] = new Array(25);
 }
 
-var smhi = new Array(246);
-for(var i = 0; i < 246; i++) {
-    smhi[i] = new Array(268);
+var smhi = new Array(20);
+for(var i = 0; i < 20; i++) {
+    smhi[i] = new Array(25);
 }
 
 var loadingText;
@@ -17,22 +17,33 @@ var timeStep = 0;
 
 
 var AnimationLayer = cc.Layer.extend({
-    ctor:function ( smhiData ) {
+    ctor:function ( smhiDataIn ) {
         this._super();
-        this.init( smhiData );
+        this.init( smhiDataIn );
     },
-    init:function ( smhiData ) 
+    init:function ( smhiDataIn ) 
     {
         this._super();
-        smhi = smhiData;
-        this.createNodes(smhiData);
+        //smhi = smhiData;
+        for(var x = 30; x < 230; x += 10)
+        {
+            for(var y = 5; y < 255; y += 10)
+            {
+                smhi[(x-30)/10][(y-5)/10] = smhiDataIn[x][y];
+            }
+        }
+
+        this.createNodes();
 
 
         //var timeStep = 0;
 
-        // var circle = drawCircle(250, 100, 15, cc.color(255,0,0,255));
-        // circle.setColor = cc.color(0,255,0,255);
-        // this.addChild(circle);
+        //var circle = drawCircle(250, 100, 15, cc.color(255,0,0,255));
+        // var drawnode = cc.DrawNode.create();
+        // drawnode.drawDot(cc.p(250,100),15,cc.color(255,0,0,255));
+        // drawnode.setPosition(cc.p(120, 750));
+        // drawnode.setColor(cc.color(0,0,255,255));
+        // this.addChild(drawnode);
 
 
         if(cc.sys.capabilities.hasOwnProperty('keyboard'))
@@ -48,11 +59,11 @@ var AnimationLayer = cc.Layer.extend({
                     {
                         case 49: // left
                             timeStep--;
-                            drawPointSprite(timeStep, smhiData);
+                            drawPointSprite(timeStep);
                             break;
                         case 50: // right
                             timeStep++;
-                            drawPointSprite(timeStep, smhiData);
+                            drawPointSprite(timeStep);
                             break;
                     }
                 }
@@ -63,26 +74,23 @@ var AnimationLayer = cc.Layer.extend({
         cc.eventManager.addListener(listener, this);
 
     },
-    createNodes:function(smhiData)
+    createNodes:function()
     {
         this._super();
 
-        for(var x = 0; x < 246; x++)
+        for(var x = 0; x < 20; x++)
         {
-            for(var y = 0; y < 268; y++)
+            for(var y = 0; y < 25; y++)
             {
-                if (smhiData[x][y] != 0)
-                {
-                    nodes[x][y] = cc.DrawNode.create();
-                    this.addChild(nodes[x][y]);
-                }
+                nodes[x][y] = cc.DrawNode.create();
+                this.addChild(nodes[x][y]);
             }
         }
 
         loadingText = new cc.LabelTTF("test", "Helvetica", 20);
         this.addChild(loadingText);
 
-        drawPointSprite(0, smhiData);
+        drawPointSprite(0);
     }
 });
 
@@ -102,7 +110,7 @@ var listener = cc.EventListener.create({
     },
     onTouchMoved:function (touch, event) {
         moveDistance = touch.getLocationX() - startTouch - moveAccumulator * changeDistance;
-        cc.log("moveDistance: " + moveDistance + " touch.getLocationX(): " + touch.getLocationX() + " startTouch: " + startTouch);
+        //cc.log("moveDistance: " + moveDistance + " touch.getLocationX(): " + touch.getLocationX() + " startTouch: " + startTouch);
         if(touchXPos == 9999)
             touchXPos = touch.getLocationX();
 
@@ -111,7 +119,7 @@ var listener = cc.EventListener.create({
             moveAccumulator += parseInt(moveDistance / changeDistance);
             cc.log("timeStep: " + timeStep);
             if(timeStep < 0) timeStep = 0;
-            drawPointSprite(timeStep, smhi);
+            drawPointSprite(timeStep);
             //touchXPos = touch.getLocationX();
         }
     }
@@ -134,13 +142,13 @@ function swipeDirection()
             if(distX > 0)
             {
                 timeStep--;
-                drawPointSprite(timeStep, smhi);
+                drawPointSprite(timeStep);
                 cc.log("swipeLeft");
             }
             else
             {
                 timeStep++;
-                drawPointSprite(timeStep, smhi);
+                drawPointSprite(timeStep);
                 cc.log("swipeRight");
             }
         }
@@ -171,64 +179,63 @@ function drawCircle(x, y, radius, color)
 
 
 
-function drawPointSprite(_timeStep, smhiData){
-var offsetX = 240;
-var offsetY = 325;
-var scaleX = 2.0/3;
-var scaleY = 2.5/3;
-var color;
+function drawPointSprite(_timeStep){
+    var size = cc.winSize;
+    cc.log(size.width);
+    var nodeSpacingX = size.width / 20;
+    var nodeSpacingY = size.width / 25;
+    var offsetX = nodeSpacingX / 2;
+    var offsetY = nodeSpacingY / 2 + 160;
+    var color;
     
-    for(var x = 0; x < 246; x+=10)
+    for(var x = 0; x < 20; x++)
     {
-        for(var y = 5; y < 268; y+=10)
+        for(var y = 0; y < 25; y++)
         {
-            if (smhiData[x][y] != 0)
-            {
+            
+            //console.log("x:" + x + "y:" + y);
+
+            xValue = offsetX + x * nodeSpacingX;
+            yValue = offsetY + y * nodeSpacingY;
+
+            // if(parameter == "t")
+            // {  
+                var temp = smhi[x][y].timeseries[_timeStep].t * 100 / 100;
+                var timeStamp = smhi[x][y].timeseries[_timeStep].validTime;
+                //cc.log(timeStamp);
+
                 
-                console.log("x:" + x + "y:" + y);
-
-                xValue = scaleX * (offsetX + x * 2);
-                yValue = scaleY * (offsetY + y * 2);
-
-                // if(parameter == "t")
-                // {  
-                    var temp = smhiData[x][y].timeseries[_timeStep].t * 100 / 100;
-                    var timeStamp = smhiData[x][y].timeseries[_timeStep].validTime;
-                    //cc.log(timeStamp);
-
-                    
-                    loadingText.setPosition(cc.p(320, 750));
-                    loadingText.setString(timeStamp);
+                loadingText.setPosition(cc.p(320, 850));
+                loadingText.setString(timeStamp);
 
 
-                    //console.log(temp);
-                    if(temp <= 0)
-                        color = cc.color(72, 249 , 231, 155);
-                    else if(temp > 0 && temp <= 5)
-                        color = cc.color(41, 105, 233, 155);
-                    else if(temp > 5 && temp <= 10)
-                        color = cc.color(3, 36, 102, 155);
-                    else if(temp > 10 && temp <= 15)
-                        color = cc.color(135, 13, 165, 155);
-                    else if(temp > 15 && temp <= 20)
-                        color = cc.color(229, 11, 98, 155);
-                    else if(temp > 20) {
-                        color = cc.color(255, 0, 0, 155);
-                    }
-                    else
-                        color = cc.color(0, 255, 0, 255);
+                //console.log(temp);
+                if(temp <= 0)
+                    color = cc.color(72, 249 , 231, 155);
+                else if(temp > 0 && temp <= 5)
+                    color = cc.color(41, 105, 233, 155);
+                else if(temp > 5 && temp <= 10)
+                    color = cc.color(3, 36, 102, 155);
+                else if(temp > 10 && temp <= 15)
+                    color = cc.color(135, 13, 165, 155);
+                else if(temp > 15 && temp <= 20)
+                    color = cc.color(229, 11, 98, 155);
+                else if(temp > 20) {
+                    color = cc.color(255, 0, 0, 155);
+                }
+                else
+                    color = cc.color(0, 255, 0, 255);
 
-                    //cc.log(xValue + " " + yValue + " " + color);
-                    nodes[x][y].clear();
-                    nodes[x][y].drawDot(cc.p(xValue,yValue),6,color);
+                //cc.log(xValue + " " + yValue + " " + color);
+                nodes[x][y].clear();
+                nodes[x][y].drawDot(cc.p(xValue,yValue),6,color);
 
-                    //cache = cc.spriteFrameCache;
-                    //cache.addSpriteFrames(res.test_plist, res.test_png);
-                    //var test = cc.Sprite.create(cache.getSpriteFrame("CloseNormal.png"));
-                    //test.setPosition(cc.p(xValue, yValue));
-                    //test.setScale(0.5);
+                //cache = cc.spriteFrameCache;
+                //cache.addSpriteFrames(res.test_plist, res.test_png);
+                //var test = cc.Sprite.create(cache.getSpriteFrame("CloseNormal.png"));
+                //test.setPosition(cc.p(xValue, yValue));
+                //test.setScale(0.5);
 
-            } 
         }
     }
     //else return null;
