@@ -1,4 +1,4 @@
 smhi_data_every5.json
 smhi_data_every10.json
-weatherplotter.xcodeproj
-Info.plist
+frameworks/runtime-src/proj.ios_mac/weatherplotter.xcodeproj/project.pbxproj
+frameworks/runtime-src/proj.ios_mac/ios/Info.plist
