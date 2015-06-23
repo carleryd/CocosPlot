@@ -13,7 +13,7 @@ var loadingText;
 var startTouch;
 var endTouch;
 var swipeTolerance = 10;
-var time = 0;
+var timeStep = 0;
 
 
 var AnimationLayer = cc.Layer.extend({
@@ -28,7 +28,7 @@ var AnimationLayer = cc.Layer.extend({
         this.createNodes(smhiData);
 
 
-        //var time = 0;
+        //var timeStep = 0;
 
         // var circle = drawCircle(250, 100, 15, cc.color(255,0,0,255));
         // circle.setColor = cc.color(0,255,0,255);
@@ -47,12 +47,12 @@ var AnimationLayer = cc.Layer.extend({
                     switch(key) 
                     {
                         case 49: // left
-                            time--
-                            drawPointSprite(time, smhiData);
+                            timeStep--;
+                            drawPointSprite(timeStep, smhiData);
                             break;
                         case 50: // right
-                            time++;
-                            drawPointSprite(time, smhiData);
+                            timeStep++;
+                            drawPointSprite(timeStep, smhiData);
                             break;
                     }
                 }
@@ -86,19 +86,40 @@ var AnimationLayer = cc.Layer.extend({
     }
 });
 
+touchXPos = 9999;
+changeDistance = 100;
+moveDistance = 0;
+moveAccumulator = 0;
+
 var listener = cc.EventListener.create({
     event: cc.EventListener.TOUCH_ONE_BY_ONE,
     swallowTouches: true,
     onTouchBegan:function (touch, event){
         cc.log("TouchBegan");
-        startTouch = touch.getLocation();
+        moveAccumulator = 0;
+        startTouch = touch.getLocationX();
         return true;
     },
-    onTouchEnded:function(touch, event){
-        cc.log("TouchEnded");
-        endTouch = touch.getLocation();
-        swipeDirection();
+    onTouchMoved:function (touch, event) {
+        moveDistance = touch.getLocationX() - startTouch - moveAccumulator * changeDistance;
+        cc.log("moveDistance: " + moveDistance + " touch.getLocationX(): " + touch.getLocationX() + " startTouch: " + startTouch);
+        if(touchXPos == 9999)
+            touchXPos = touch.getLocationX();
+
+        if(Math.abs(moveDistance) > changeDistance) {
+            timeStep += parseInt(moveDistance / changeDistance);
+            moveAccumulator += parseInt(moveDistance / changeDistance);
+            cc.log("timeStep: " + timeStep);
+            if(timeStep < 0) timeStep = 0;
+            drawPointSprite(timeStep, smhi);
+            //touchXPos = touch.getLocationX();
+        }
     }
+    // onTouchEnded:function(touch, event){
+    //     cc.log("TouchEnded");
+    //     endTouch = touch.getLocation();
+    //     swipeDirection();
+    // }
 
 });
 
@@ -112,14 +133,14 @@ function swipeDirection()
         {
             if(distX > 0)
             {
-                time--;
-                drawPointSprite(time, smhi);
+                timeStep--;
+                drawPointSprite(timeStep, smhi);
                 cc.log("swipeLeft");
             }
             else
             {
-                time++;
-                drawPointSprite(time, smhi);
+                timeStep++;
+                drawPointSprite(timeStep, smhi);
                 cc.log("swipeRight");
             }
         }
@@ -150,7 +171,7 @@ function drawCircle(x, y, radius, color)
 
 
 
-function drawPointSprite(time, smhiData){
+function drawPointSprite(_timeStep, smhiData){
 var offsetX = 240;
 var offsetY = 325;
 var scaleX = 2.0/3;
@@ -171,9 +192,9 @@ var color;
 
                 // if(parameter == "t")
                 // {  
-                    var temp = smhiData[x][y].timeseries[time].t * 100 / 100;
-                    var timeStamp = smhiData[x][y].timeseries[time].validTime;
-                    cc.log(timeStamp);
+                    var temp = smhiData[x][y].timeseries[_timeStep].t * 100 / 100;
+                    var timeStamp = smhiData[x][y].timeseries[_timeStep].validTime;
+                    //cc.log(timeStamp);
 
                     
                     loadingText.setPosition(cc.p(320, 750));
