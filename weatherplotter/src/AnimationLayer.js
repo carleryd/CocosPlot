@@ -178,14 +178,14 @@ var scaleX = 2.0/3;
 var scaleY = 2.5/3;
 var color;
     
-    for(var x = 0; x < 246; x++)
+    for(var x = 0; x < 246; x+=10)
     {
-        for(var y = 0; y < 268; y++)
+        for(var y = 5; y < 268; y+=10)
         {
             if (smhiData[x][y] != 0)
             {
                 
-                //console.log(smhiData[x][y]);
+                console.log("x:" + x + "y:" + y);
 
                 xValue = scaleX * (offsetX + x * 2);
                 yValue = scaleY * (offsetY + y * 2);
