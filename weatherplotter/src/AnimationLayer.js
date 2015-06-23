@@ -30,9 +30,9 @@ var AnimationLayer = cc.Layer.extend({
 
         //var time = 0;
 
-        var circle = drawCircle(250, 100, 15, cc.color(255,0,0,255));
-        circle.setColor = cc.color(0,255,0,255);
-        this.addChild(circle);
+        // var circle = drawCircle(250, 100, 15, cc.color(255,0,0,255));
+        // circle.setColor = cc.color(0,255,0,255);
+        // this.addChild(circle);
 
 
         if(cc.sys.capabilities.hasOwnProperty('keyboard'))
@@ -151,8 +151,8 @@ function drawCircle(x, y, radius, color)
 
 
 function drawPointSprite(time, smhiData){
-var offsetX = 480;
-var offsetY = 130;
+var offsetX = 240;
+var offsetY = 325;
 var scaleX = 2.0/3;
 var scaleY = 2.5/3;
 var color;
@@ -176,23 +176,23 @@ var color;
                     cc.log(timeStamp);
 
                     
-                    loadingText.setPosition(cc.p(500, 600));
+                    loadingText.setPosition(cc.p(320, 750));
                     loadingText.setString(timeStamp);
 
 
                     //console.log(temp);
                     if(temp <= 0)
-                        color = cc.color(72, 249 , 231, 255);
+                        color = cc.color(72, 249 , 231, 155);
                     else if(temp > 0 && temp <= 5)
-                        color = cc.color(41, 105, 233, 255);
+                        color = cc.color(41, 105, 233, 155);
                     else if(temp > 5 && temp <= 10)
-                        color = cc.color(3, 36, 102, 255);
+                        color = cc.color(3, 36, 102, 155);
                     else if(temp > 10 && temp <= 15)
-                        color = cc.color(135, 13, 165, 255);
+                        color = cc.color(135, 13, 165, 155);
                     else if(temp > 15 && temp <= 20)
-                        color = cc.color(229, 11, 98, 255);
+                        color = cc.color(229, 11, 98, 155);
                     else if(temp > 20) {
-                        color = cc.color(255, 0, 0, 255);
+                        color = cc.color(255, 0, 0, 155);
                     }
                     else
                         color = cc.color(0, 255, 0, 255);
